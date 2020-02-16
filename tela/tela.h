@@ -33,7 +33,7 @@ private:
     qint64 currentTime, timebase=0;
 
     void showMenu();
-    void showCredits();
+    void showSettings();
 
     GLint createBox() {
         GLint id = glGenLists(1);
