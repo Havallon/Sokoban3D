@@ -6,10 +6,12 @@
 #include <iostream>
 #include<string>
 
-int menu = 0;
+int menuItem = 0;
 int display = 0;
+int itemAmount = 2;
 GLfloat x1 = 0.0f;
 GLint boxId;
+int soundVolume = 50;
 
 Tela::Tela(){
     setWindowTitle("Main Menu");
@@ -19,6 +21,9 @@ Tela::Tela(){
     connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
     setWindowFlags( (windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
     xrot = 0;
+    selectSound = new QMediaPlayer();
+    selectSound->setMedia(QUrl("sounds/select.wav"));
+    selectSound->setVolume(soundVolume);
 }
 
 Tela::~Tela()
@@ -76,7 +81,9 @@ void Tela::resizeGL(int width, int height){
 
 void Tela::showMenu(){
     QString name = "Sokoban3D";
-    QString start = "New Game";
+    QString start = "Start Game";
+    QString settings = "Settings";
+
     QString credits = "Developed by: Havallon and Nadine";
     QString exit = "Exit";
     QString open = "Powered by OpenGL";
@@ -89,23 +96,31 @@ void Tela::showMenu(){
 
     font.setPixelSize(50);
     font.setBold(false);
-    if (menu == 0){
+    if (menuItem == 0){
         glColor3f(1.0, 0,0);
     } else{
         glColor3f(1.0, 1.0, 1.0);
     }
     this->renderText(270, 470, start, font);
-    if (menu == 1){
+
+    if (menuItem == 1){
         glColor3f(1.0, 0,0);
     } else{
         glColor3f(1.0, 1.0, 1.0);
     }
-    this->renderText(350, 540, exit, font);
+    this->renderText(310, 520, settings, font);
+
+    if (menuItem == 2){
+        glColor3f(1.0, 0,0);
+    } else{
+        glColor3f(1.0, 1.0, 1.0);
+    }
+    this->renderText(350, 570, exit, font);
 
     glColor3f(1.0, 1.0, 1.0);
-    font.setPixelSize(20);
+    font.setPixelSize(15);
     this->renderText(10, 590, credits, font);
-    this->renderText(610, 590, open, font);
+    this->renderText(660, 590, open, font);
 }
 
 
@@ -141,24 +156,28 @@ void Tela::paintGL(){
 }
 
 void Tela::keyPressEvent(QKeyEvent *event){
-
     switch(event->key()){
     case Qt::Key_Up:
-        if (menu > 0 && display == 0) menu--;
+        playSound(selectSound);
+        if (menuItem > 0 && display == 0) menuItem--;
         break;
     case Qt::Key_Down:
-        if (menu < 1 && display == 0) menu++;
+        playSound(selectSound);
+        if (menuItem < itemAmount && display == 0) menuItem++;
         break;
     case Qt::Key_Return:
-        if (menu == 1 && display == 0){
+        if (menuItem == itemAmount && display == 0){
             close();
+        }
+        else if (menuItem == 1 && display == 0){
+            display = 1;
         }
         break;
     case Qt::Key_Left:
-        x1 -= 1;
+        x1 -= 10;
         break;
     case Qt::Key_Right:
-        x1 += 1;
+        x1 += 10;
         break;
     }
     std::cout<< x1 << std::endl;

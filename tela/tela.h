@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QTime>
+#include <QMediaPlayer>
 
 class QTimer;
 
@@ -25,6 +26,8 @@ private:
     QTime time;
     GLuint texture[1];
     GLfloat xrot;
+
+    QMediaPlayer *selectSound;
 
     float frame, frameAnt=0;
     qint64 currentTime, timebase=0;
@@ -97,6 +100,14 @@ private:
         fps.setNum(frameAnt);
         QString text = "FPS: " + fps;
         this->renderText(10, 30, text, font);
+    }
+
+    void playSound(QMediaPlayer *sound){
+        if(sound->state() == QMediaPlayer::PlayingState){
+            sound->setPosition(0);
+        }else if (sound->state() == QMediaPlayer::StoppedState){
+            sound->play();
+        }
     }
 };
 
