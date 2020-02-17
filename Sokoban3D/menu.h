@@ -1,5 +1,5 @@
-#ifndef TELA_H
-#define TELA_H
+#ifndef MENU_H
+#define MENU_H
 
 #include <QGLWidget>
 #include <QTime>
@@ -7,13 +7,13 @@
 
 class QTimer;
 
-class Tela : public QGLWidget
+class Menu : public QGLWidget
 {
     Q_OBJECT
 
 public:
-    Tela();
-    ~Tela();
+    Menu();
+    ~Menu();
 
 protected:
     void initializeGL();
@@ -28,12 +28,14 @@ private:
     GLfloat xrot;
 
     QMediaPlayer *selectSound;
+    QMediaPlayer *backgroundMusic;
 
     float frame, frameAnt=0;
     qint64 currentTime, timebase=0;
 
     void showMenu();
     void showSettings();
+    void showCredits();
 
     GLint createBox() {
         GLint id = glGenLists(1);
@@ -111,4 +113,4 @@ private:
     }
 };
 
-#endif // TELA_H
+#endif // MENU_H

@@ -1,4 +1,4 @@
-#include "tela.h"
+#include "menu.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <QKeyEvent>
@@ -12,8 +12,9 @@ int itemAmount = 2;
 GLfloat x1 = 0.0f;
 GLint boxId;
 int soundVolume = 50;
+int musicVolume = 100;
 
-Tela::Tela(){
+Menu::Menu(){
     setWindowTitle("Main Menu");
     time = QTime::currentTime();
     timer = new QTimer(this);
@@ -21,17 +22,21 @@ Tela::Tela(){
     connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
     setWindowFlags( (windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
     xrot = 0;
+
     selectSound = new QMediaPlayer();
     selectSound->setMedia(QUrl("sounds/select.wav"));
     selectSound->setVolume(soundVolume);
+
+    backgroundMusic = new QMediaPlayer();
+    backgroundMusic->setVolume(musicVolume);
 }
 
-Tela::~Tela()
+Menu::~Menu()
 {
     glDeleteTextures(1, texture);
 }
 
-void Tela::initializeGL(){
+void Menu::initializeGL(){
     glShadeModel(GL_SMOOTH);
     qglClearColor(Qt::black);
 
@@ -63,7 +68,7 @@ void Tela::initializeGL(){
     boxId = createBox();
 }
 
-void Tela::resizeGL(int width, int height){
+void Menu::resizeGL(int width, int height){
     // Prevent divide by zero (in the gluPerspective call)
     if (height == 0)
         height = 1;
@@ -79,7 +84,7 @@ void Tela::resizeGL(int width, int height){
     glLoadIdentity(); // Reset modelview matrix
 }
 
-void Tela::showMenu(){
+void Menu::showMenu(){
     QString name = "Sokoban3D";
     QString start = "Start Game";
     QString settings = "Settings";
@@ -123,12 +128,16 @@ void Tela::showMenu(){
     this->renderText(660, 590, open, font);
 }
 
-void Tela::showSettings(){
+void Menu::showSettings(){
     QString soundVolumeStr;
+    QString musicVolumeStr;
     soundVolumeStr.setNum(soundVolume);
+    musicVolumeStr.setNum(musicVolume);
     QString soundVolumeText = "Sound Volume: " + soundVolumeStr;
+    QString musicVolumeText = "Music Volume: " + musicVolumeStr;
 
     QString back = "Back";
+    QString sets = "Settings";
 
     QFont font;
     font.setPixelSize(50);
@@ -146,11 +155,22 @@ void Tela::showSettings(){
     } else{
         glColor3f(1.0, 1.0, 1.0);
     }
-    this->renderText(315, 205, back, font);
+    this->renderText(185, 225, musicVolumeText, font);
+
+    if (menuItem == 2){
+        glColor3f(1.0, 0,0);
+    } else{
+        glColor3f(1.0, 1.0, 1.0);
+    }
+    this->renderText(315, 295, back, font);
+
+    glColor3f(1.0, 1.0, 1.0);
+    font.setBold(true);
+    this->renderText(290, 65, sets, font);
 
 }
 
-void Tela::paintGL(){
+void Menu::paintGL(){
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
 
@@ -182,7 +202,7 @@ void Tela::paintGL(){
 
 }
 
-void Tela::keyPressEvent(QKeyEvent *event){
+void Menu::keyPressEvent(QKeyEvent *event){
     switch(event->key()){
     case Qt::Key_Up:
         if (menuItem > 0 && display < 2){
@@ -203,7 +223,7 @@ void Tela::keyPressEvent(QKeyEvent *event){
         else if (menuItem == 1 && display == 0){
             display = 1;
             menuItem = 0;
-        }else if (menuItem == 1 && display == 1){
+        }else if (menuItem == 2 && display == 1){
             menuItem = 0;
             display = 0;
         }
@@ -213,11 +233,19 @@ void Tela::keyPressEvent(QKeyEvent *event){
             if (soundVolume > 0) soundVolume--;
             selectSound->setVolume(soundVolume);
         }
+        else if (display == 1 && menuItem == 1){
+            if (musicVolume > 0) musicVolume--;
+            backgroundMusic->setVolume(musicVolume);
+        }
         break;
     case Qt::Key_Right:
         if (display == 1 && menuItem == 0){
             if (soundVolume < 100) soundVolume++;
             selectSound->setVolume(soundVolume);
+        }
+        else if (display == 1 && menuItem == 1){
+            if (musicVolume < 100) musicVolume++;
+            backgroundMusic->setVolume(musicVolume);
         }
         break;
     case Qt::Key_A:

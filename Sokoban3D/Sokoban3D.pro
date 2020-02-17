@@ -1,22 +1,21 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2020-02-14T23:16:04
+# Project created by QtCreator 2020-02-16T23:21:57
 #
 #-------------------------------------------------
-
 QT += opengl
 QT += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = tela
+TARGET = Sokoban3D
 TEMPLATE = app
 
 CONFIG += c++11
 SOURCES += main.cpp\
-        tela.cpp
+        menu.cpp
 
-HEADERS  += tela.h
+HEADERS  += menu.h
 
 win32 {
     INCLUDEPATH += C:/freeglut-build-3.2.1/install/include
@@ -25,5 +24,3 @@ win32 {
         -lOpengl32 \
         -lglu32
 }
-
-DISTFILES +=
