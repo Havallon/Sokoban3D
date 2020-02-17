@@ -1,10 +1,14 @@
 #include "menu.h"
+#include "game0.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <QKeyEvent>
 #include <QTimer>
 #include <iostream>
 #include<string>
+#include <QStyle>
+#include <QDesktopWidget>
+#include <QApplication>
 
 int menuItem = 0;
 int display = 0;
@@ -15,7 +19,7 @@ int soundVolume = 50;
 int musicVolume = 100;
 
 Menu::Menu(){
-    setWindowTitle("Main Menu");
+    setWindowTitle("Sokoban3D");
     time = QTime::currentTime();
     timer = new QTimer(this);
     timer->setSingleShot(true);
@@ -226,6 +230,22 @@ void Menu::keyPressEvent(QKeyEvent *event){
         }else if (menuItem == 2 && display == 1){
             menuItem = 0;
             display = 0;
+        } else if (menuItem == 0 && display == 0){
+            Game0 *game0 = new Game0(soundVolume,musicVolume);
+            game0->setMinimumSize(800,600);
+            game0->setMaximumSize(800,600);
+            game0->setGeometry(
+                QStyle::alignedRect(
+                    Qt::LeftToRight,
+                    Qt::AlignCenter,
+                    game0->size(),
+                    qApp->desktop()->availableGeometry()
+                )
+            );
+
+            this->close();
+            game0->show();
+
         }
         break;
     case Qt::Key_Left:
