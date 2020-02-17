@@ -1,5 +1,5 @@
 #include "menu.h"
-#include "game0.h"
+#include "gameDesing.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <QKeyEvent>
@@ -231,7 +231,7 @@ void Menu::keyPressEvent(QKeyEvent *event){
             menuItem = 0;
             display = 0;
         } else if (menuItem == 0 && display == 0){
-            Game0 *game0 = new Game0(soundVolume,musicVolume);
+            GameDesing *game0 = new GameDesing(soundVolume,musicVolume);
             game0->setMinimumSize(800,600);
             game0->setMaximumSize(800,600);
             game0->setGeometry(
@@ -275,5 +275,4 @@ void Menu::keyPressEvent(QKeyEvent *event){
         x1 += 1;
         break;
     }
-    std::cout<< x1 << std::endl;
 }

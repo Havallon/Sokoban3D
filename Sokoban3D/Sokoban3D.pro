@@ -14,10 +14,12 @@ TEMPLATE = app
 CONFIG += c++11
 SOURCES += main.cpp\
         menu.cpp \
-    game0.cpp
+    game0.cpp \
+    boxposition.cpp
 
 HEADERS  += menu.h \
-    game0.h
+    gameDesing.h \
+    boxposition.h
 
 win32 {
     INCLUDEPATH += C:/freeglut-build-3.2.1/install/include
