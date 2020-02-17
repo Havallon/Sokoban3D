@@ -83,7 +83,6 @@ void Game0::resizeGL(int width, int height){
 void Game0::paintGL(){
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
-
     glLoadIdentity(); // Reset current modelview matrix
 
     glTranslatef(0.0, -1, -10); // Move into the screen
@@ -93,7 +92,6 @@ void Game0::paintGL(){
     glPushMatrix();
     glCallList(_boxId);
     glPopMatrix();
-
 
     showFPS();
     // Framerate control

@@ -15,8 +15,8 @@ int display = 0;
 int itemAmount = 2;
 GLfloat x1 = 0.0f;
 GLint boxId;
-int soundVolume = 50;
-int musicVolume = 100;
+int soundVolume = 30;
+int musicVolume = 70;
 
 Menu::Menu(){
     setWindowTitle("Sokoban3D");
@@ -235,13 +235,13 @@ void Menu::keyPressEvent(QKeyEvent *event){
             game0->setMinimumSize(800,600);
             game0->setMaximumSize(800,600);
             game0->setGeometry(
-                QStyle::alignedRect(
-                    Qt::LeftToRight,
-                    Qt::AlignCenter,
-                    game0->size(),
-                    qApp->desktop()->availableGeometry()
-                )
-            );
+                        QStyle::alignedRect(
+                            Qt::LeftToRight,
+                            Qt::AlignCenter,
+                            game0->size(),
+                            qApp->desktop()->availableGeometry()
+                            )
+                        );
 
             this->close();
             game0->show();
