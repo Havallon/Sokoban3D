@@ -1,5 +1,5 @@
-#ifndef GAMEDESING_H
-#define GAMEDESING_H
+#ifndef GAME0_H
+#define GAME0_H
 
 #include <QGLWidget>
 #include <QTime>
@@ -7,13 +7,13 @@
 
 class QTimer;
 
-class GameDesing : public QGLWidget
+class Game0 : public QGLWidget
 {
     Q_OBJECT
 
 public:
-    GameDesing(int soundVolume, int musicVolume);
-    ~GameDesing();
+    Game0(int soundVolume, int musicVolume);
+    ~Game0();
 
 protected:
     void initializeGL();
@@ -125,7 +125,8 @@ private:
 
     void drawMap();
     void movePlayer(int dir);
+    void showBoxes();
 };
 
-#endif // GAMEDESING_H
+#endif // GAME0_H
 

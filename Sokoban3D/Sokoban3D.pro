@@ -18,8 +18,8 @@ SOURCES += main.cpp\
     boxposition.cpp
 
 HEADERS  += menu.h \
-    gameDesing.h \
-    boxposition.h
+    boxposition.h \
+    game0.h
 
 win32 {
     INCLUDEPATH += C:/freeglut-build-3.2.1/install/include

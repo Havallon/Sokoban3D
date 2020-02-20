@@ -1,4 +1,4 @@
-#include "gameDesing.h"
+#include "Game0.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <QKeyEvent>
@@ -7,12 +7,13 @@
 #include <iostream>
 #include<string>
 #include "boxposition.h"
+#include <cmath>
 
 GLfloat x2 = 0.0f;
 GLfloat y2 = 0.0f;
 GLfloat z2 = 0.0f;
 
-
+#define PI_OVER_180 0.0174532925f
 
 int mapSize = 9;
 
@@ -21,6 +22,9 @@ int floorMap[9][9];
 BoxPosition *fitBox[3];
 BoxPosition *boxes[3];
 BoxPosition *player;
+
+int boxAmount = 3;
+int box = 0;
 
 void initMap(){
     int auxWall[9][9] = {
@@ -68,7 +72,7 @@ void initMap(){
     player = new BoxPosition(2,7);
 }
 
-GameDesing::GameDesing(int soundVolume, int musicVolume){
+Game0::Game0(int soundVolume, int musicVolume){
     setWindowTitle("Sokoban3D");
     time = QTime::currentTime();
     timer = new QTimer(this);
@@ -88,11 +92,11 @@ GameDesing::GameDesing(int soundVolume, int musicVolume){
     cameraAngleZ = 0;
 }
 
-GameDesing::~GameDesing(){
+Game0::~Game0(){
     glDeleteTextures(4, texture);
 }
 
-void GameDesing::initializeGL(){
+void Game0::initializeGL(){
     glShadeModel(GL_SMOOTH);
     qglClearColor(Qt::black);
 
@@ -148,7 +152,7 @@ void GameDesing::initializeGL(){
     initMap();
 }
 
-void GameDesing::resizeGL(int width, int height){
+void Game0::resizeGL(int width, int height){
     // Prevent divide by zero (in the gluPerspective call)
     if (height == 0)
         height = 1;
@@ -164,7 +168,7 @@ void GameDesing::resizeGL(int width, int height){
     glLoadIdentity(); // Reset modelview matrix
 }
 
-void GameDesing::drawMap(){
+void Game0::drawMap(){
     for (int i = 0; i < mapSize; i++){
         for (int j = 0; j < mapSize; j++){
             if (wallMap[i][j] == 1){
@@ -181,7 +185,7 @@ void GameDesing::drawMap(){
             }
         }
     }
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < boxAmount; i++){
         glPushMatrix();
         glTranslatef(fitBox[i]->x,0,fitBox[i]->y);
         glCallList(_floorId);
@@ -199,20 +203,34 @@ void GameDesing::drawMap(){
     glPopMatrix();
 }
 
-void GameDesing::paintGL(){
+void Game0::showBoxes() {
+    QFont font;
+    font.setPixelSize(25);
+    font.setBold(false);
+    glColor3f(1.0, 1.0, 1.0);
+    QString amount;
+    QString current;
+    amount.setNum(boxAmount);
+    current.setNum(box);
+    QString text = "Boxes: " + current + "/" + amount;
+    this->renderText(340, 30, text, font);
+}
+
+void Game0::paintGL(){
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
     glLoadIdentity(); // Reset current modelview matrix
 
     glTranslatef(-3, -1, -25); // Move into the screen
-    glTranslatef(+5,+1,+5);
+    glTranslatef(+4,+1,+5);
     glRotatef(cameraAngleX  , 1, 0, 0);
-    glRotatef(y2, 0, 1, 0);
+    glRotatef(cameraAngleY, 0, 1, 0);
     glRotatef(cameraAngleZ, 0, 0, 1);
-    glTranslatef(-5,-1,-5);
+    glTranslatef(-4,-1,-5);
     drawMap();
 
     showFPS();
+    showBoxes();
     // Framerate control
     int delay = time.msecsTo(QTime::currentTime());
     if (delay == 0)
@@ -222,42 +240,144 @@ void GameDesing::paintGL(){
 
 }
 
-void GameDesing::movePlayer(int dir){
+void Game0::movePlayer(int dir){
     //DIR
     // 0 - frente
-    // 1 - direta
+    // 1 - direita
     // 2 - tras
     // 3- esquerda
 
     if (dir == 0){
-        if (player->y > 0)
-            if (wallMap[player->y-1][player->x] == 0)
-                player->y -= 1;
+        if (player->y > 0){
+            if (wallMap[player->y-1][player->x] == 0){
+                boolean canWalk = true;
+                int idBox = -1;
+                for (int i = 0; i < boxAmount; i++){
+                    if (player->y-1 == boxes[i]->y && player->x == boxes[i]->x){
+                        if (wallMap[player->y-2][player->x] == 1){
+                            canWalk = false;
+                        } else {
+                            for (int j = 0; j < boxAmount; j++){
+                                if (player->y-2 == boxes[j]->y && player->x == boxes[j]->x){
+                                    canWalk = false;
+                                }
+                            }
+                        }
+                        if (canWalk) idBox = i;
+                    }
+                }
+                if (canWalk){
+                    if (idBox == -1)
+                        player->y -= 1;
+                    else{
+                        player->y -= 1;
+                        boxes[idBox]->y -= 1;
+                    }
+                }
+            }
+        }
     }
     else if (dir == 1){
-        if (player->x < 8)
-            if (wallMap[player->y][player->x+1] == 0)
-                player->x += 1;
+        if (player->x < 8){
+            if (wallMap[player->y][player->x+1] == 0){
+                boolean canWalk = true;
+                int idBox = -1;
+                for (int i = 0; i < boxAmount; i++){
+                    if (player->y == boxes[i]->y && player->x+1 == boxes[i]->x){
+                        if (wallMap[player->y][player->x+2] == 1){
+                            canWalk = false;
+                        } else {
+                            for (int j = 0; j < boxAmount; j++){
+                                if (player->y == boxes[j]->y && player->x+2 == boxes[j]->x){
+                                    canWalk = false;
+                                }
+                            }
+                        }
+                        if (canWalk) idBox = i;
+                    }
+                }
+                if (canWalk){
+                    if (idBox == -1)
+                        player->x += 1;
+                    else{
+                        player->x += 1;
+                        boxes[idBox]->x += 1;
+                    }
+                }
+            }
+        }
     }
     else if (dir == 2){
-        if (player->y < 8)
-            if (wallMap[player->y+1][player->x] == 0)
-                player->y += 1;
+        if (player->y < 8){
+            if (wallMap[player->y+1][player->x] == 0){
+                boolean canWalk = true;
+                int idBox = -1;
+                for (int i = 0; i < boxAmount; i++){
+                    if (player->y+1 == boxes[i]->y && player->x == boxes[i]->x){
+                        if (wallMap[player->y+2][player->x] == 1){
+                            canWalk = false;
+                        } else {
+                            for (int j = 0; j < boxAmount; j++){
+                                if (player->y+2 == boxes[j]->y && player->x == boxes[j]->x){
+                                    canWalk = false;
+                                }
+                            }
+                        }
+                        if (canWalk) idBox = i;
+                    }
+                }
+                if (canWalk){
+                    if (idBox == -1)
+                        player->y += 1;
+                    else{
+                        player->y += 1;
+                        boxes[idBox]->y += 1;
+                    }
+                }
+            }
+        }
     }
     else if (dir == 3){
-        if (player->x > 0)
-            if (wallMap[player->y][player->x-1] == 0)
-                player->x -= 1;
+        if (player->x > 0){
+            if (wallMap[player->y][player->x-1] == 0){
+                boolean canWalk = true;
+                int idBox = -1;
+                for (int i = 0; i < boxAmount; i++){
+                    if (player->y == boxes[i]->y && player->x-1 == boxes[i]->x){
+                        if (wallMap[player->y][player->x-2] == 1){
+                            canWalk = false;
+                        } else {
+                            for (int j = 0; j < boxAmount; j++){
+                                if (player->y == boxes[j]->y && player->x-2 == boxes[j]->x){
+                                    canWalk = false;
+                                }
+                            }
+                        }
+                        if (canWalk) idBox = i;
+                    }
+                }
+                if (canWalk){
+                    if (idBox == -1)
+                        player->x -= 1;
+                    else{
+                        player->x -= 1;
+                        boxes[idBox]->x -= 1;
+                    }
+                }
+            }
+        }
     }
 }
 
-void GameDesing::keyPressEvent(QKeyEvent *event){
+void Game0::keyPressEvent(QKeyEvent *event){
     switch(event->key()){
     case Qt::Key_Q:
-        y2 -= 1;
+        cameraAngleY -= 1;
+        if (cameraAngleY == -360) cameraAngleY = 0;
         break;
     case Qt::Key_E:
-        y2 += 1;
+        cameraAngleY += 1;
+        if (cameraAngleY == 360) cameraAngleY = 0;
         break;
     case Qt::Key_Left:
         x2 -= 1;
@@ -282,9 +402,12 @@ void GameDesing::keyPressEvent(QKeyEvent *event){
         break;
     case Qt::Key_D:
         movePlayer(1);
-    break;
+        break;
+    case Qt::Key_R:
+        initMap();
+        break;
     }
     std::cout<< "x: " << x2 << std::endl;
-    std::cout<< "y: " << y2 << std::endl;
+    std::cout<< "y: " << cameraAngleY << std::endl;
     std::cout<< "z: " << z2 << std::endl;
 }
