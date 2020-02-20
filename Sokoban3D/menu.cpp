@@ -51,13 +51,14 @@ void Menu::initializeGL(){
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     glEnable(GL_TEXTURE_2D);
-    QImage img = convertToGLFormat(QImage("textures/box.bmp"));
+    QImage img = convertToGLFormat(QImage("textures/box2.bmp"));
     glGenTextures(1, texture);
 
     // Texture using nearest filter
     glBindTexture(GL_TEXTURE_2D, texture[0]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
     glTexImage2D(GL_TEXTURE_2D, 0, 3, img.width(), img.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
 
     // Set up lighting
@@ -69,6 +70,7 @@ void Menu::initializeGL(){
     glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
     glEnable(GL_LIGHT1);
     glEnable(GL_LIGHTING);
+
     boxId = createBox();
 }
 
