@@ -126,6 +126,7 @@ private:
     void drawMap();
     void movePlayer(int dir);
     void showBoxes();
+    void showInfo();
 };
 
 #endif // GAME0_H

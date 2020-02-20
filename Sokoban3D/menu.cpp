@@ -51,7 +51,7 @@ void Menu::initializeGL(){
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     glEnable(GL_TEXTURE_2D);
-    QImage img = convertToGLFormat(QImage("textures/box2.bmp"));
+    QImage img = convertToGLFormat(QImage("textures/box.bmp"));
     glGenTextures(1, texture);
 
     // Texture using nearest filter

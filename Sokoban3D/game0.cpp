@@ -105,11 +105,13 @@ void Game0::initializeGL(){
     glDepthFunc(GL_LEQUAL);
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_TEXTURE_2D);
     QImage box = convertToGLFormat(QImage("textures/box.bmp"));
     QImage wall = convertToGLFormat(QImage("textures/wall.bmp"));
-    QImage floor = convertToGLFormat(QImage("textures/floor.bmp"));
+    QImage fit = convertToGLFormat(QImage("textures/box2.png"));
     QImage player = convertToGLFormat(QImage("textures/player.bmp"));
     glGenTextures(4, texture);
 
@@ -127,7 +129,7 @@ void Game0::initializeGL(){
     glBindTexture(GL_TEXTURE_2D, texture[2]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, floor.width(), floor.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, floor.bits());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, fit.width(), fit.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, fit.bits());
 
     glBindTexture(GL_TEXTURE_2D, texture[3]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -187,7 +189,7 @@ void Game0::drawMap(){
     }
     for (int i = 0; i < boxAmount; i++){
         glPushMatrix();
-        glTranslatef(fitBox[i]->x,0,fitBox[i]->y);
+        glTranslatef(fitBox[i]->x,1,fitBox[i]->y);
         glCallList(_floorId);
         glPopMatrix();
 
@@ -216,6 +218,33 @@ void Game0::showBoxes() {
     this->renderText(340, 30, text, font);
 }
 
+void Game0::showInfo() {
+    QFont font;
+    font.setPixelSize(15);
+    font.setBold(false);
+    glColor3f(1.0, 1.0, 1.0);
+    QString move = "PRESS W,A,S,D TO MOVE";
+    QString rotate = "PRESS Q AND E TO ROTATE THE CAMERA";
+    QString reset = "PRESS R TO RESET THE GAME";
+    this->renderText(10, 590, move, font);
+    this->renderText(255, 590, reset, font);
+    this->renderText(505, 590, rotate, font);
+}
+
+void checkBoxes(){
+    box = 0;
+    for (int i=0; i < boxAmount; i++){
+        int j = 0;
+        while (j<boxAmount){
+            if (fitBox[j]->x == boxes[i]->x && fitBox[j]->y == boxes[i]->y){
+                box++;
+                break;
+            }
+            j++;
+        }
+    }
+}
+
 void Game0::paintGL(){
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
@@ -229,8 +258,10 @@ void Game0::paintGL(){
     glTranslatef(-4,-1,-5);
     drawMap();
 
+    showInfo();
     showFPS();
     showBoxes();
+    checkBoxes();
     // Framerate control
     int delay = time.msecsTo(QTime::currentTime());
     if (delay == 0)
@@ -385,10 +416,10 @@ void Game0::keyPressEvent(QKeyEvent *event){
     case Qt::Key_Right:
         x2 += 1;
         break;
-    case Qt::Key_PageUp:
+    case Qt::Key_Up:
         z2 += 1;
         break;
-    case Qt::Key_PageDown:
+    case Qt::Key_Down:
         z2 -= 1;
         break;
     case Qt::Key_W:
