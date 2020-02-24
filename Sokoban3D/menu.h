@@ -17,6 +17,7 @@ public:
     Menu();
     ~Menu();
     void stageCompleted();
+    QMediaPlaylist *playlist;
 
 protected:
     void initializeGL();
@@ -32,7 +33,6 @@ private:
 
     QMediaPlayer *selectSound;
     QMediaPlayer *backgroundMusic;
-    QMediaPlaylist *playlist;
 
     float frame, frameAnt=0;
     qint64 currentTime, timebase=0;

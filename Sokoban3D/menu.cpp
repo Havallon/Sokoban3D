@@ -16,7 +16,7 @@ int itemAmount = 2;
 GLfloat x1 = 0.0f;
 GLint boxId;
 int soundVolume = 30;
-int musicVolume = 70;
+int musicVolume = 60;
 
 Menu::Menu(){
     setWindowTitle("Sokoban3D");
@@ -186,6 +186,8 @@ void Menu::stageCompleted() {
     QString stageCompleted = "Stage Completed";
     QString home = "Go Back to Home Screen";
     QFont font;
+
+    backgroundMusic->stop();
 
     display = 3;
 
