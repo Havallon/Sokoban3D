@@ -31,8 +31,14 @@ Menu::Menu(){
     selectSound->setMedia(QUrl("sounds/select.wav"));
     selectSound->setVolume(soundVolume);
 
+    playlist = new QMediaPlaylist();
+    playlist->addMedia(QUrl("sounds/backgroundSokoban.wav"));
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+
     backgroundMusic = new QMediaPlayer();
     backgroundMusic->setVolume(musicVolume);
+    backgroundMusic->setPlaylist(playlist);
+    backgroundMusic->play();
 }
 
 Menu::~Menu()
@@ -209,6 +215,7 @@ void Menu::paintGL(){
     glTranslatef(0.0f, 0.0f, -10); // Move into the screen
 
     showFPS();
+
 
     if (display == 0){
         glPushMatrix();

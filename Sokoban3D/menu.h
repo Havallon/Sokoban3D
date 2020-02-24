@@ -4,6 +4,8 @@
 #include <QGLWidget>
 #include <QTime>
 #include <QMediaPlayer>
+#include <QMediaPlaylist>
+
 
 class QTimer;
 
@@ -30,6 +32,7 @@ private:
 
     QMediaPlayer *selectSound;
     QMediaPlayer *backgroundMusic;
+    QMediaPlaylist *playlist;
 
     float frame, frameAnt=0;
     qint64 currentTime, timebase=0;
