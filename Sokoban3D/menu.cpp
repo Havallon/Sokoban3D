@@ -5,7 +5,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <iostream>
-#include<string>
+#include <string>
 #include <QStyle>
 #include <QDesktopWidget>
 #include <QApplication>
@@ -176,6 +176,30 @@ void Menu::showSettings(){
 
 }
 
+void Menu::stageCompleted() {
+    QString stageCompleted = "Stage Completed";
+    QString home = "Go Back to Home Screen";
+    QFont font;
+
+    display = 3;
+
+    font.setPixelSize(50);
+    font.setBold(true);
+
+    glColor3f(1.0, 1.0, 1.0);
+    this->renderText(190, 120, stageCompleted, font);
+
+    font.setPixelSize(50);
+    font.setBold(false);
+
+    if (menuItem == 0){
+        glColor3f(1.0, 0,0);
+    } else{
+        glColor3f(1.0, 1.0, 1.0);
+    }
+    this->renderText(125, 295, home, font);
+}
+
 void Menu::paintGL(){
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
@@ -196,6 +220,8 @@ void Menu::paintGL(){
         xrot += 1;
     } else if (display == 1){
         showSettings();
+    } else if (display == 3){
+        stageCompleted();
     }
 
 
@@ -248,6 +274,9 @@ void Menu::keyPressEvent(QKeyEvent *event){
             this->close();
             game0->show();
 
+        } else if (menuItem == 0 && display == 3){
+            menuItem = 0;
+            display = 0;
         }
         break;
     case Qt::Key_Left:

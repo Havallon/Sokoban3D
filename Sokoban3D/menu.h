@@ -14,6 +14,7 @@ class Menu : public QGLWidget
 public:
     Menu();
     ~Menu();
+    void stageCompleted();
 
 protected:
     void initializeGL();

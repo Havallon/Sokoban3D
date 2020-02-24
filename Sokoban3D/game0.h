@@ -6,6 +6,7 @@
 #include <QMediaPlayer>
 
 class QTimer;
+class Menu;
 
 class Game0 : public QGLWidget
 {
@@ -127,6 +128,7 @@ private:
     void movePlayer(int dir);
     void showBoxes();
     void showInfo();
+    void stageCompleted();
 };
 
 #endif // GAME0_H

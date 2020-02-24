@@ -5,9 +5,13 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <iostream>
-#include<string>
+#include <string>
 #include "boxposition.h"
 #include <cmath>
+#include <QStyle>
+#include <QDesktopWidget>
+#include <QApplication>
+#include "menu.h"
 
 GLfloat x2 = 0.0f;
 GLfloat y2 = 0.0f;
@@ -262,6 +266,22 @@ void Game0::paintGL(){
     showFPS();
     showBoxes();
     checkBoxes();
+    if(box == boxAmount){
+        Menu *w = new Menu();
+        w->setMinimumSize(800, 600);
+        w->setMaximumSize(800, 600);
+        w->setGeometry( //Iniciar a tela no centro
+                    QStyle::alignedRect(
+                        Qt::LeftToRight,
+                        Qt::AlignCenter,
+                        w->size(),
+                        qApp->desktop()->availableGeometry()
+                        )
+                    );
+        this->close();
+        w->stageCompleted();
+        w->show();
+    }
     // Framerate control
     int delay = time.msecsTo(QTime::currentTime());
     if (delay == 0)
