@@ -15,14 +15,7 @@
 
 #include "gamelevel.h"
 
-GLfloat x2 = 0.0f;
-GLfloat y2 = 0.0f;
-GLfloat z2 = 0.0f;
-
 #define PI_OVER_180 0.0174532925f
-
-int mapX = 9;
-int mapY = 9;
 
 vector<vector<int>> wallMap;
 vector<vector<int>> floorMap;
@@ -34,6 +27,12 @@ int boxAmount;
 int box = 0;
 
 int lv;
+
+float offsetX, offsetY;
+
+int maxStage;
+
+int sound,music;
 
 void initMap(int lv){
     GameLevel *g = new GameLevel(lv);
@@ -47,6 +46,10 @@ void initMap(int lv){
     player = g->getPlayer();
 
     boxAmount = boxes.size();
+
+    offsetX = g->getCameraX();
+    offsetY = g->getCameraY();
+    maxStage = 1;
 }
 
 Game0::Game0(int soundVolume, int musicVolume, int level){
@@ -68,6 +71,8 @@ Game0::Game0(int soundVolume, int musicVolume, int level){
     cameraAngleY = 0;
     cameraAngleZ = 0;
     lv = level;
+    sound = soundVolume;
+    music = musicVolume;
 }
 
 Game0::~Game0(){
@@ -149,8 +154,8 @@ void Game0::resizeGL(int width, int height){
 }
 
 void Game0::drawMap(){
-    for (int i = 0; i < mapX; i++){
-        for (int j = 0; j < mapY; j++){
+    for (int i = 0; i < wallMap.size(); i++){
+        for (int j = 0; j < wallMap[0].size(); j++){
             if (wallMap[i][j] == 1){
                 glPushMatrix();
                 glTranslatef(j, 1.0, i);
@@ -209,7 +214,7 @@ void Game0::showInfo() {
     this->renderText(505, 590, rotate, font);
 }
 
-void checkBoxes(){
+void Game0::checkBoxes(){
     box = 0;
     for (int i=0; i < boxAmount; i++){
         int j = 0;
@@ -221,25 +226,7 @@ void checkBoxes(){
             j++;
         }
     }
-}
 
-void Game0::paintGL(){
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
-    glLoadIdentity(); // Reset current modelview matrix
-
-    glTranslatef(-3, -1, -25); // Move into the screen
-    glTranslatef(+4,+1,+5);
-    glRotatef(cameraAngleX  , 1, 0, 0);
-    glRotatef(cameraAngleY, 0, 1, 0);
-    glRotatef(cameraAngleZ, 0, 0, 1);
-    glTranslatef(-4,-1,-5);
-    drawMap();
-
-    showInfo();
-    showFPS();
-    showBoxes();
-    checkBoxes();
     if(box == boxAmount){
         Menu *w = new Menu();
         w->setMinimumSize(800, 600);
@@ -253,9 +240,35 @@ void Game0::paintGL(){
                         )
                     );
         this->close();
-        w->stageCompleted();
+        if (lv == maxStage){
+            //zerou o game
+        }else{
+            w->setVolume(sound,music);
+            w->stageCompleted(++lv);
+
+        }
         w->show();
     }
+}
+
+void Game0::paintGL(){
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
+    glLoadIdentity(); // Reset current modelview matrix
+
+    glTranslatef(-3, -1, -25); // Move into the screen
+    glTranslatef(offsetX,+1,offsetY);
+    glRotatef(cameraAngleX  , 1, 0, 0);
+    glRotatef(cameraAngleY, 0, 1, 0);
+    glRotatef(cameraAngleZ, 0, 0, 1);
+    glTranslatef(-offsetX,-1,-offsetY);
+    drawMap();
+
+    showInfo();
+    showFPS();
+    showBoxes();
+    checkBoxes();
+
     // Framerate control
     int delay = time.msecsTo(QTime::currentTime());
     if (delay == 0)
@@ -404,18 +417,6 @@ void Game0::keyPressEvent(QKeyEvent *event){
         cameraAngleY += 1;
         if (cameraAngleY == 360) cameraAngleY = 0;
         break;
-    case Qt::Key_Left:
-        x2 -= 1;
-        break;
-    case Qt::Key_Right:
-        x2 += 1;
-        break;
-    case Qt::Key_Up:
-        z2 += 1;
-        break;
-    case Qt::Key_Down:
-        z2 -= 1;
-        break;
     case Qt::Key_W:
         movePlayer(0);
         break;
@@ -432,7 +433,4 @@ void Game0::keyPressEvent(QKeyEvent *event){
         initMap(lv);
         break;
     }
-    std::cout<< "x: " << x2 << std::endl;
-    std::cout<< "y: " << cameraAngleY << std::endl;
-    std::cout<< "z: " << z2 << std::endl;
 }

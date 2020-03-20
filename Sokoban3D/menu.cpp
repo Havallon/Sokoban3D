@@ -17,6 +17,12 @@ GLfloat x1 = 0.0f;
 GLint boxId;
 int soundVolume = 30;
 int musicVolume = 60;
+int currentLevel;
+
+void Menu::setVolume(int soundVl, int musicVl){
+    soundVolume = soundVl;
+    musicVolume = musicVl;
+}
 
 Menu::Menu(){
     setWindowTitle("Sokoban3D");
@@ -182,11 +188,14 @@ void Menu::showSettings(){
 
 }
 
-void Menu::stageCompleted() {
+void Menu::stageCompleted(int lv) {
     QString stageCompleted = "Stage Completed";
+    QString nextStage = "Next Stage";
     QString home = "Go Back to Home Screen";
     QFont font;
 
+    currentLevel = lv;
+    std::cout << lv << std::endl;
     backgroundMusic->stop();
 
     display = 3;
@@ -201,6 +210,12 @@ void Menu::stageCompleted() {
     font.setBold(false);
 
     if (menuItem == 0){
+        glColor3f(1.0, 0,0);
+    } else{
+        glColor3f(1.0, 1.0, 1.0);
+    }
+    this->renderText(275, 215, nextStage, font);
+    if (menuItem == 1){
         glColor3f(1.0, 0,0);
     } else{
         glColor3f(1.0, 1.0, 1.0);
@@ -230,7 +245,7 @@ void Menu::paintGL(){
     } else if (display == 1){
         showSettings();
     } else if (display == 3){
-        stageCompleted();
+        stageCompleted(currentLevel);
     }
 
 
@@ -250,11 +265,23 @@ void Menu::keyPressEvent(QKeyEvent *event){
             menuItem--;
             playSound(selectSound);
         }
+        if (display == 3){
+            if (menuItem > 0){
+                menuItem--;
+                playSound(selectSound);
+            }
+        }
         break;
     case Qt::Key_Down:
         if (menuItem < itemAmount && display < 2){
             menuItem++;
             playSound(selectSound);
+        }
+        if (display == 3){
+            if (menuItem < 1){
+                menuItem++;
+                playSound(selectSound);
+            }
         }
         break;
     case Qt::Key_Return:
@@ -283,9 +310,27 @@ void Menu::keyPressEvent(QKeyEvent *event){
             this->close();
             game0->show();
 
-        } else if (menuItem == 0 && display == 3){
-            menuItem = 0;
-            display = 0;
+        } else if (display == 3){
+            if (menuItem == 0){
+                Game0 *game0 = new Game0(soundVolume,musicVolume,currentLevel);
+                game0->setMinimumSize(800,600);
+                game0->setMaximumSize(800,600);
+                game0->setGeometry(
+                            QStyle::alignedRect(
+                                Qt::LeftToRight,
+                                Qt::AlignCenter,
+                                game0->size(),
+                                qApp->desktop()->availableGeometry()
+                                )
+                            );
+
+                this->close();
+                game0->show();
+            }
+            else if (menuItem==1){
+                menuItem = 0;
+                display = 0;
+            }
         }
         break;
     case Qt::Key_Left:
@@ -310,9 +355,11 @@ void Menu::keyPressEvent(QKeyEvent *event){
         break;
     case Qt::Key_A:
         x1 -= 1;
+        std::cout<<x1<<std::endl;
         break;
     case Qt::Key_D:
         x1 += 1;
+        std::cout<<x1<<std::endl;
         break;
     }
 }

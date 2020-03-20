@@ -16,7 +16,8 @@ class Menu : public QGLWidget
 public:
     Menu();
     ~Menu();
-    void stageCompleted();
+    void stageCompleted(int lv);
+    void setVolume(int soundVl, int musicVl);
     QMediaPlaylist *playlist;
 
 protected:

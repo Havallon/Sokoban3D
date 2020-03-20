@@ -129,6 +129,7 @@ private:
     void showBoxes();
     void showInfo();
     void stageCompleted();
+    void checkBoxes();
 };
 
 #endif // GAME0_H

@@ -9,8 +9,9 @@ using namespace std;
 class GameLevel
 {
 private:
-    int mapSizeX;
-    int mapSizeY;
+
+    float cameraX;
+    float cameraY;
 
     vector<vector<int>> map;
     vector<vector<int>> floor;
@@ -20,8 +21,10 @@ public:
 
     GameLevel(int level);
 
-    int getMapSizeX();
-    int getMapSizeY();
+
+    float getCameraX();
+    float getCameraY();
+
 
     vector<vector<int>> getMap();
     vector<vector<int>> getFloor();
@@ -30,6 +33,7 @@ public:
     BoxPosition* getPlayer();
 
     void map0();
+    void map1();
 };
 
 #endif // GAMELEVEL_H
