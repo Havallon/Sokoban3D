@@ -13,7 +13,7 @@ class Game0 : public QGLWidget
     Q_OBJECT
 
 public:
-    Game0(int soundVolume, int musicVolume);
+    Game0(int soundVolume, int musicVolume, int level);
     ~Game0();
 
 protected:

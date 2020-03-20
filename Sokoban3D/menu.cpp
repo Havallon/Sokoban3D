@@ -268,7 +268,7 @@ void Menu::keyPressEvent(QKeyEvent *event){
             menuItem = 0;
             display = 0;
         } else if (menuItem == 0 && display == 0){
-            Game0 *game0 = new Game0(soundVolume,musicVolume);
+            Game0 *game0 = new Game0(soundVolume,musicVolume,0);
             game0->setMinimumSize(800,600);
             game0->setMaximumSize(800,600);
             game0->setGeometry(

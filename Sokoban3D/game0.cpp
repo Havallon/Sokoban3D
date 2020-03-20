@@ -13,70 +13,43 @@
 #include <QApplication>
 #include "menu.h"
 
+#include "gamelevel.h"
+
 GLfloat x2 = 0.0f;
 GLfloat y2 = 0.0f;
 GLfloat z2 = 0.0f;
 
 #define PI_OVER_180 0.0174532925f
 
-int mapSize = 9;
+int mapX = 9;
+int mapY = 9;
 
-int wallMap[9][9];
-int floorMap[9][9];
-BoxPosition *fitBox[3];
-BoxPosition *boxes[3];
+vector<vector<int>> wallMap;
+vector<vector<int>> floorMap;
+vector<BoxPosition*> fitBox;
+vector<BoxPosition*> boxes;
 BoxPosition *player;
 
-int boxAmount = 3;
+int boxAmount;
 int box = 0;
 
-void initMap(){
-    int auxWall[9][9] = {
-        {0,1,1,1,1,1,0,0,0},
-        {0,1,0,0,0,1,1,1,1},
-        {0,1,0,0,0,1,0,0,1},
-        {0,1,1,0,0,0,0,0,1},
-        {1,1,1,0,1,1,1,0,1},
-        {1,0,0,0,1,0,1,0,1},
-        {1,0,0,0,1,0,1,1,1},
-        {1,0,0,0,1,0,0,0,0},
-        {1,1,1,1,1,0,0,0,0}};
+int lv;
 
-    int auxFloor[9][9] = {
-        {0,1,1,1,1,1,0,0,0},
-        {0,1,1,1,1,1,1,1,1},
-        {0,1,1,1,1,1,1,1,1},
-        {0,1,1,1,1,1,1,0,1},
-        {1,1,1,1,1,1,1,0,1},
-        {1,1,1,1,1,0,1,0,1},
-        {1,1,1,1,1,0,1,1,1},
-        {1,1,1,1,1,0,0,0,0},
-        {1,1,1,1,1,0,0,0,0}};
+void initMap(int lv){
+    GameLevel *g = new GameLevel(lv);
 
-    for (int i = 0; i < mapSize; i++){
-        for (int j = 0; j < mapSize; j++){
-            wallMap[i][j] = auxWall[i][j];
-        }
-    }
+    wallMap = g->getMap();
+    floorMap = g->getFloor();
 
-    for (int i = 0; i < mapSize; i++){
-        for (int j = 0; j < mapSize; j++){
-            floorMap[i][j] = auxFloor[i][j];
-        }
-    }
+    fitBox = g->getFits();
+    boxes = g->getBoxes();
 
-    fitBox[0] = new BoxPosition(7,3);
-    fitBox[1] = new BoxPosition(7,4);
-    fitBox[2] = new BoxPosition(7,5);
+    player = g->getPlayer();
 
-    boxes[0] = new BoxPosition(2,5);
-    boxes[1] = new BoxPosition(2,6);
-    boxes[2] = new BoxPosition(3,6);
-
-    player = new BoxPosition(2,7);
+    boxAmount = boxes.size();
 }
 
-Game0::Game0(int soundVolume, int musicVolume){
+Game0::Game0(int soundVolume, int musicVolume, int level){
     setWindowTitle("Sokoban3D");
     time = QTime::currentTime();
     timer = new QTimer(this);
@@ -94,6 +67,7 @@ Game0::Game0(int soundVolume, int musicVolume){
     cameraAngleX = 50;
     cameraAngleY = 0;
     cameraAngleZ = 0;
+    lv = level;
 }
 
 Game0::~Game0(){
@@ -155,7 +129,7 @@ void Game0::initializeGL(){
     _floorId = createBox(2);
     _player_Id = createBox(3);
 
-    initMap();
+    initMap(lv);
 }
 
 void Game0::resizeGL(int width, int height){
@@ -175,8 +149,8 @@ void Game0::resizeGL(int width, int height){
 }
 
 void Game0::drawMap(){
-    for (int i = 0; i < mapSize; i++){
-        for (int j = 0; j < mapSize; j++){
+    for (int i = 0; i < mapX; i++){
+        for (int j = 0; j < mapY; j++){
             if (wallMap[i][j] == 1){
                 glPushMatrix();
                 glTranslatef(j, 1.0, i);
@@ -455,7 +429,7 @@ void Game0::keyPressEvent(QKeyEvent *event){
         movePlayer(1);
         break;
     case Qt::Key_R:
-        initMap();
+        initMap(lv);
         break;
     }
     std::cout<< "x: " << x2 << std::endl;
