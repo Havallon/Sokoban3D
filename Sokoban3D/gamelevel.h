@@ -12,6 +12,9 @@ private:
 
     float cameraX;
     float cameraY;
+    float cameraZ;
+    float translateX;
+    float translateZ;
 
     vector<vector<int>> map;
     vector<vector<int>> floor;
@@ -24,6 +27,9 @@ public:
 
     float getCameraX();
     float getCameraY();
+    float getCameraZ();
+    float getTranslateX();
+    float getTranslateZ();
 
 
     vector<vector<int>> getMap();

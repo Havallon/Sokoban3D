@@ -31,6 +31,10 @@ void GameLevel::map0(){
 
     cameraX = map[0].size()/2.0;
     cameraY = map.size()/2.0;
+    cameraZ = 0;
+
+    translateX = -3;
+    translateZ = -25;
 
     fits.push_back(new BoxPosition(7,3));
     fits.push_back(new BoxPosition(7,4));
@@ -69,6 +73,10 @@ void GameLevel::map1(){
 
     cameraX = map[0].size()/2.0;
     cameraY = map.size()/2.0;
+    cameraZ = 0;
+
+    translateX = -3;
+    translateZ = -25;
 
     fits.push_back(new BoxPosition(1,6));
     fits.push_back(new BoxPosition(1,7));
@@ -102,6 +110,10 @@ void GameLevel::map2(){
 
     cameraX = map[0].size()/2.0;
     cameraY = map.size()/2.0;
+    cameraZ = 3;
+
+    translateX = -8;
+    translateZ = -22;
 
     fits.push_back(new BoxPosition(1,2));
     fits.push_back(new BoxPosition(4,3));
@@ -156,4 +168,18 @@ float GameLevel::getCameraX(){
 
 float GameLevel::getCameraY(){
     return cameraY;
+}
+
+float GameLevel::getCameraZ(){
+    return cameraZ;
+}
+
+
+float GameLevel::getTranslateX(){
+    return translateX;
+}
+
+
+float GameLevel::getTranslateZ(){
+    return translateZ;
 }

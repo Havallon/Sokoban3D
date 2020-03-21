@@ -23,12 +23,15 @@ vector<BoxPosition*> fitBox;
 vector<BoxPosition*> boxes;
 BoxPosition *player;
 
+//GLfloat x2 = -3.0f;
+//GLfloat z2 = -25.0f;
+
 int boxAmount;
 int box = 0;
 
 int lv;
 
-float offsetX, offsetY;
+float offsetX, offsetY, offsetZ, translateX, translateZ;
 
 int maxStage;
 
@@ -49,6 +52,11 @@ void initMap(int lv){
 
     offsetX = g->getCameraX();
     offsetY = g->getCameraY();
+    offsetZ = g->getCameraZ();
+
+    translateX = g->getTranslateX();
+    translateZ = g->getTranslateZ();
+
     maxStage = 2;
 }
 
@@ -232,13 +240,13 @@ void Game0::checkBoxes(){
         w->setMinimumSize(800, 600);
         w->setMaximumSize(800, 600);
         w->setGeometry( //Iniciar a tela no centro
-                    QStyle::alignedRect(
-                        Qt::LeftToRight,
-                        Qt::AlignCenter,
-                        w->size(),
-                        qApp->desktop()->availableGeometry()
-                        )
-                    );
+                        QStyle::alignedRect(
+                            Qt::LeftToRight,
+                            Qt::AlignCenter,
+                            w->size(),
+                            qApp->desktop()->availableGeometry()
+                            )
+                        );
         this->close();
         if (lv == maxStage){
             w->setVolume(sound,music);
@@ -256,12 +264,12 @@ void Game0::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
     glLoadIdentity(); // Reset current modelview matrix
 
-    glTranslatef(-3, 0, -25); // Move into the screen
-    glTranslatef(offsetX,0,offsetY);
+    glTranslatef(translateX, 0, translateZ); // Move into the screen
+    glTranslatef(offsetX,offsetZ,offsetY);
     glRotatef(cameraAngleX  , 1, 0, 0);
     glRotatef(cameraAngleY, 0, 1, 0);
     glRotatef(cameraAngleZ, 0, 0, 1);
-    glTranslatef(-offsetX,0,-offsetY);
+    glTranslatef(-offsetX,-offsetZ,-offsetY);
     drawMap();
 
     showInfo();
@@ -432,5 +440,23 @@ void Game0::keyPressEvent(QKeyEvent *event){
     case Qt::Key_R:
         initMap(lv);
         break;
+
+//    case Qt::Key_Left:
+//        x2 -= 1;
+//        break;
+//    case Qt::Key_Right:
+//        x2 += 1;
+//        break;
+//    case Qt::Key_Up:
+//        z2 += 1;
+//        break;
+//    case Qt::Key_Down:
+//        z2 -= 1;
+//        break;
+
     }
+
+    //std::cout<< "x: " << x2 << std::endl;
+    //std::cout<< "y: " << y2 << std::endl;
+    //std::cout<< "z: " << z2 << std::endl;
 }
