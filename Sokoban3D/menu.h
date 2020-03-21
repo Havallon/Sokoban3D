@@ -17,6 +17,7 @@ public:
     Menu();
     ~Menu();
     void stageCompleted(int lv);
+    void gameCompleted();
     void setVolume(int soundVl, int musicVl);
     QMediaPlaylist *playlist;
 

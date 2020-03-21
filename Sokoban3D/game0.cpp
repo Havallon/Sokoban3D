@@ -241,11 +241,11 @@ void Game0::checkBoxes(){
                     );
         this->close();
         if (lv == maxStage){
-            //zerou o game
+            w->setVolume(sound,music);
+            w->gameCompleted();
         }else{
             w->setVolume(sound,music);
             w->stageCompleted(++lv);
-
         }
         w->show();
     }

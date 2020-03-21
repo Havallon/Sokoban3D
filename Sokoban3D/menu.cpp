@@ -223,6 +223,32 @@ void Menu::stageCompleted(int lv) {
     this->renderText(125, 295, home, font);
 }
 
+void Menu::gameCompleted() {
+    QString gameCompleted = "Game Completed";
+    QString home = "Go Back to Home Screen";
+    QFont font;
+
+    backgroundMusic->stop();
+
+    display = 4;
+
+    font.setPixelSize(50);
+    font.setBold(true);
+
+    glColor3f(1.0, 1.0, 1.0);
+    this->renderText(190, 120, gameCompleted, font);
+
+    font.setPixelSize(50);
+    font.setBold(false);
+
+    if (menuItem == 0){
+        glColor3f(1.0, 0,0);
+    } else{
+        glColor3f(1.0, 1.0, 1.0);
+    }
+    this->renderText(125, 295, home, font);
+}
+
 void Menu::paintGL(){
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
@@ -246,6 +272,8 @@ void Menu::paintGL(){
         showSettings();
     } else if (display == 3){
         stageCompleted(currentLevel);
+    } else if (display == 4){
+        gameCompleted();
     }
 
 
@@ -331,6 +359,9 @@ void Menu::keyPressEvent(QKeyEvent *event){
                 menuItem = 0;
                 display = 0;
             }
+        } else if (display == 4){
+            menuItem = 0;
+            display = 0;
         }
         break;
     case Qt::Key_Left:
