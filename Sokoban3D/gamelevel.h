@@ -34,6 +34,7 @@ public:
 
     void map0();
     void map1();
+    void map2();
 };
 
 #endif // GAMELEVEL_H

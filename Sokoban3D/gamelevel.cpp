@@ -6,11 +6,6 @@ vector<BoxPosition*> boxs;
 BoxPosition *player1;
 
 void GameLevel::map0(){
-    map.clear();
-    floor.clear();
-    fits.clear();
-    boxs.clear();
-
     map = {
         {0,1,1,1,1,1,0,0,0},
         {0,1,0,0,0,1,1,1,1},
@@ -50,12 +45,6 @@ void GameLevel::map0(){
 }
 
 void GameLevel::map1(){
-
-    map.clear();
-    floor.clear();
-    fits.clear();
-    boxs.clear();
-
     map = {
         {0,0,1,1,1,1,1,1,1,0},
         {0,0,1,0,0,0,0,0,1,0},
@@ -92,15 +81,52 @@ void GameLevel::map1(){
     boxs.push_back(new BoxPosition(3,6));
 
     player1 = new BoxPosition(6,2);
-
 }
 
+void GameLevel::map2(){
+    map = {
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,1},
+        {1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1},
+        {1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,1},
+        {1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+
+    floor = {
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+
+    cameraX = map[0].size()/2.0;
+    cameraY = map.size()/2.0;
+
+    fits.push_back(new BoxPosition(1,2));
+    fits.push_back(new BoxPosition(4,3));
+    fits.push_back(new BoxPosition(7,3));
+    fits.push_back(new BoxPosition(10,2));
+
+    boxs.push_back(new BoxPosition(2,2));
+    boxs.push_back(new BoxPosition(5,3));
+    boxs.push_back(new BoxPosition(8,3));
+    boxs.push_back(new BoxPosition(11,2));
+
+    player1 = new BoxPosition(2,4);
+}
 
 GameLevel::GameLevel(int level){
+    map.clear();
+    floor.clear();
+    fits.clear();
+    boxs.clear();
     if (level == 0){
         map0();
     } else if (level == 1){
         map1();
+    } else if (level == 2) {
+        map2();
     }
 }
 

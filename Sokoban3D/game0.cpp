@@ -49,7 +49,7 @@ void initMap(int lv){
 
     offsetX = g->getCameraX();
     offsetY = g->getCameraY();
-    maxStage = 1;
+    maxStage = 2;
 }
 
 Game0::Game0(int soundVolume, int musicVolume, int level){
@@ -283,7 +283,7 @@ void Game0::movePlayer(int dir){
     // 0 - frente
     // 1 - direita
     // 2 - tras
-    // 3- esquerda
+    // 3 - esquerda
 
     if (dir == 0){
         if (player->y > 0){
@@ -316,7 +316,7 @@ void Game0::movePlayer(int dir){
         }
     }
     else if (dir == 1){
-        if (player->x < 8){
+        if (player->x < wallMap[0].size()-1){
             if (wallMap[player->y][player->x+1] == 0){
                 boolean canWalk = true;
                 int idBox = -1;
@@ -346,7 +346,7 @@ void Game0::movePlayer(int dir){
         }
     }
     else if (dir == 2){
-        if (player->y < 8){
+        if (player->y < wallMap.size()-1){
             if (wallMap[player->y+1][player->x] == 0){
                 boolean canWalk = true;
                 int idBox = -1;
