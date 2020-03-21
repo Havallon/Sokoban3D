@@ -5,8 +5,8 @@
 class BoxPosition
 {
 public:
-    BoxPosition(int x, int y);
-    int x,y;
+    BoxPosition(unsigned int x, unsigned int y);
+    unsigned int x,y;
 };
 
 #endif // BOXPOSITION_H

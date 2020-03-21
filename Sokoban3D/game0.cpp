@@ -154,8 +154,8 @@ void Game0::resizeGL(int width, int height){
 }
 
 void Game0::drawMap(){
-    for (int i = 0; i < wallMap.size(); i++){
-        for (int j = 0; j < wallMap[0].size(); j++){
+    for (unsigned int i = 0; i < wallMap.size(); i++){
+        for (unsigned int j = 0; j < wallMap[0].size(); j++){
             if (wallMap[i][j] == 1){
                 glPushMatrix();
                 glTranslatef(j, 1.0, i);
@@ -256,12 +256,12 @@ void Game0::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
     glLoadIdentity(); // Reset current modelview matrix
 
-    glTranslatef(-3, -1, -25); // Move into the screen
-    glTranslatef(offsetX,+1,offsetY);
+    glTranslatef(-3, 0, -25); // Move into the screen
+    glTranslatef(offsetX,0,offsetY);
     glRotatef(cameraAngleX  , 1, 0, 0);
     glRotatef(cameraAngleY, 0, 1, 0);
     glRotatef(cameraAngleZ, 0, 0, 1);
-    glTranslatef(-offsetX,-1,-offsetY);
+    glTranslatef(-offsetX,0,-offsetY);
     drawMap();
 
     showInfo();

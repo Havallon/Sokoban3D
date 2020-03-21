@@ -1,6 +1,6 @@
 #include "boxposition.h"
 
-BoxPosition::BoxPosition(int x, int y){
+BoxPosition::BoxPosition(unsigned int x, unsigned int y){
     this->x = x;
     this->y = y;
 }
