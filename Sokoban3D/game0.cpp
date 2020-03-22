@@ -57,7 +57,7 @@ void initMap(int lv){
     translateX = g->getTranslateX();
     translateZ = g->getTranslateZ();
 
-    maxStage = 2;
+    maxStage = 4;
 }
 
 Game0::Game0(int soundVolume, int musicVolume, int level){

@@ -50,6 +50,45 @@ void GameLevel::map0(){
 
 void GameLevel::map1(){
     map = {
+        {1,1,1,1,1,0,0,0,0},
+        {1,0,0,0,1,1,1,1,1},
+        {1,0,0,0,1,0,0,0,1},
+        {1,0,0,0,1,0,1,0,1},
+        {1,1,1,0,0,0,0,0,1},
+        {0,1,0,0,0,1,1,1,1},
+        {0,1,0,0,0,0,0,1,0},
+        {0,1,1,1,1,1,1,1,0}};
+
+    floor = {
+        {1,1,1,1,1,0,0,0,0},
+        {1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1},
+        {0,1,1,1,1,1,1,1,1},
+        {0,1,1,1,1,1,1,1,0},
+        {0,1,1,1,1,1,1,1,0}};
+
+    cameraX = map[0].size()/2.0;
+    cameraY = map.size()/2.0;
+    cameraZ = 0;
+
+    translateX = -3;
+    translateZ = -25;
+
+    fits.push_back(new BoxPosition(4,6));
+    fits.push_back(new BoxPosition(5,6));
+    fits.push_back(new BoxPosition(6,6));
+
+    boxs.push_back(new BoxPosition(3,4));
+    boxs.push_back(new BoxPosition(2,2));
+    boxs.push_back(new BoxPosition(5,3));
+
+    player1 = new BoxPosition(3,6);
+}
+
+void GameLevel::map2(){
+    map = {
         {0,0,1,1,1,1,1,1,1,0},
         {0,0,1,0,0,0,0,0,1,0},
         {0,0,1,0,0,0,0,0,1,0},
@@ -91,7 +130,46 @@ void GameLevel::map1(){
     player1 = new BoxPosition(6,2);
 }
 
-void GameLevel::map2(){
+void GameLevel::map3(){
+    map = {
+        {1,1,1,1,1,1,1,1},
+        {1,0,0,0,1,0,0,1},
+        {1,0,1,0,1,0,0,1},
+        {1,0,0,0,0,0,0,1},
+        {1,0,1,0,1,0,0,1},
+        {1,0,0,0,1,0,0,1},
+        {1,1,1,1,1,0,0,1},
+        {0,0,0,0,1,1,1,1}};
+
+    floor = {
+        {1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1},
+        {0,0,0,0,1,1,1,1}};
+
+    cameraX = map[0].size()/2.0;
+    cameraY = map.size()/2.0;
+    cameraZ = 0;
+
+    translateX = -3;
+    translateZ = -25;
+
+    fits.push_back(new BoxPosition(6,2));
+    fits.push_back(new BoxPosition(6,3));
+    fits.push_back(new BoxPosition(6,4));
+
+    boxs.push_back(new BoxPosition(5,2));
+    boxs.push_back(new BoxPosition(5,3));
+    boxs.push_back(new BoxPosition(5,4));
+
+    player1 = new BoxPosition(5,6);
+}
+
+void GameLevel::map4(){
     map = {
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,1},
@@ -139,6 +217,10 @@ GameLevel::GameLevel(int level){
         map1();
     } else if (level == 2) {
         map2();
+    } else if (level == 3){
+        map3();
+    } else if (level == 4){
+        map4();
     }
 }
 
